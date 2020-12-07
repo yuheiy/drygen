@@ -1,0 +1,39 @@
+{
+	"name": "drygen",
+	"description": "The code generator that depends on the specified files.",
+	"license": "MIT",
+	"author": "Yuhei Yasuda <yuhei.yasuda1003@gmail.com> (https://yuheiy.com/)",
+	"repository": "yuheiy/drygen",
+	"version": "0.0.0",
+	"main": "lib/drygen.js",
+	"types": "lib/drygen.d.ts",
+	"bin": "lib/cli.js",
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"build": "tsc --project .",
+		"prepublish": "npm run build",
+		"watch": "tsc --project . --watch",
+		"test": "jest",
+		"demo": "node lib/cli.js --config demo/drygen.config.js"
+	},
+	"dependencies": {
+		"change-case": "^4.1.2",
+		"chokidar": "^3.4.3",
+		"globby": "^11.0.1",
+		"handlebars": "^4.7.6",
+		"meow": "^8.0.0"
+	},
+	"devDependencies": {
+		"@types/jest": "^26.0.16",
+		"@types/node": "^14.14.10",
+		"jest": "^26.6.3",
+		"prettier": "^2.2.1",
+		"ts-jest": "^26.4.4",
+		"typescript": "^4.1.2"
+	},
+	"engines": {
+		"node": ">=10"
+	}
+}

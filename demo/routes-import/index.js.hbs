@@ -1,0 +1,8 @@
+export const routes = [
+{{#each dependencies}}
+	{
+		path: "/{{this.parsedPath.name}}",
+		action: () => import("{{relativePath this.path}}"),
+	},
+{{/each}}
+];
