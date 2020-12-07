@@ -16,6 +16,7 @@ import {
 import chokidar from "chokidar";
 import globby from "globby";
 import Handlebars, { HelperDeclareSpec } from "handlebars";
+import normalize from "normalize-path";
 
 export interface IInputOptions {
 	cwd?: string;
@@ -237,7 +238,7 @@ export default async function drygen(inputOptions: IInputOptions) {
 
 		const outputDir = path.dirname(outputFormat.path);
 		handlebars.registerHelper("relativePath", (filePath: unknown) => {
-			const relativePath = path.posix.relative(outputDir, filePath as any);
+			const relativePath = normalize(path.relative(outputDir, filePath as any));
 			return relativePath.startsWith(".") ? relativePath : `./${relativePath}`;
 		});
 
