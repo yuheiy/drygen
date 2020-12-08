@@ -18,7 +18,7 @@ import globby from "globby";
 import Handlebars, { HelperDeclareSpec } from "handlebars";
 import normalize from "normalize-path";
 
-export interface IInputOptions {
+export interface Options {
 	cwd?: string;
 	rules: Rule[];
 	handlebars?: {
@@ -70,7 +70,7 @@ export type OutputContentFormat = {
 
 export type OutputFormat = OutputTemplateFormat | OutputContentFormat;
 
-export default async function drygen(inputOptions: IInputOptions) {
+export default async function drygen(inputOptions: Options) {
 	const options = {
 		cwd: path.resolve(inputOptions.cwd || ""),
 		rules: inputOptions.rules,
