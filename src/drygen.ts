@@ -289,6 +289,7 @@ export default async function drygen(inputOptions: IInputOptions) {
 }
 
 const defaultHandlebarsHelpers = {
+	// case
 	camelCase,
 	capitalCase,
 	constantCase,
@@ -300,6 +301,11 @@ const defaultHandlebarsHelpers = {
 	pathCase,
 	sentenceCase,
 	snakeCase,
+
+	// path
+	stripExt: function stripExt(filePath: any) {
+		return filePath.split(".").slice(0, -1).join(".");
+	},
 };
 
 const defaultHandlebarsPartials = {};
