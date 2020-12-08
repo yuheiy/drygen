@@ -88,47 +88,44 @@ export default async function drygen(inputOptions: IInputOptions) {
 
 	const handlebars = createHandlebars(options.handlebars);
 
-	const writePromise = Promise.all(
+	await Promise.all(
 		options.rules.map(async (rule) => {
 			await writeFor(rule);
 		})
 	);
 
 	const watchers: chokidar.FSWatcher[] = [];
-	let setupWatchPromise: Promise<any>;
 	if (options.watch) {
-		setupWatchPromise = Promise.all(
+		await Promise.all(
 			options.rules.map(async (rule) => {
-				const dependenciesWatcher = chokidar
-					.watch(
-						Array.isArray(rule.dependencies)
+				const dependencyPatternListAsArray = Array.isArray(rule.dependencies)
 							? rule.dependencies
-							: Object.values(rule.dependencies).flat(),
-						{ ignoreInitial: true }
-					)
-					.on("add", async () => {
-						await writeFor(rule);
-						await refreshTemplateFilePaths();
+					: Object.values(rule.dependencies).flat();
+				const dependenciesWatcher = chokidar
+					.watch(dependencyPatternListAsArray, { ignoreInitial: true })
+					.on("add", () => {
+						writeFor(rule);
+						refreshTemplateFilePaths();
 					})
-					.on("change", async () => {
-						await writeFor(rule);
-						await refreshTemplateFilePaths();
+					.on("change", () => {
+						writeFor(rule);
+						refreshTemplateFilePaths();
 					})
-					.on("unlink", async () => {
-						await writeFor(rule);
-						await refreshTemplateFilePaths();
+					.on("unlink", () => {
+						writeFor(rule);
+						refreshTemplateFilePaths();
 					});
 
 				const templatesWatcher = chokidar
 					.watch(await buildTemplateFilePaths(rule), { ignoreInitial: true })
-					.on("add", async () => {
-						await writeFor(rule);
+					.on("add", () => {
+						writeFor(rule);
 					})
-					.on("change", async () => {
-						await writeFor(rule);
+					.on("change", () => {
+						writeFor(rule);
 					})
-					.on("unlink", async () => {
-						await writeFor(rule);
+					.on("unlink", () => {
+						writeFor(rule);
 					});
 
 				watchers.push(dependenciesWatcher, templatesWatcher);
@@ -140,8 +137,6 @@ export default async function drygen(inputOptions: IInputOptions) {
 			})
 		);
 	}
-
-	await Promise.all([writePromise, setupWatchPromise!]);
 
 	return {
 		async unwatch() {
