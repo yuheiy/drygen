@@ -189,13 +189,13 @@ export default async function drygen(inputOptions: IInputOptions) {
 
 		if (templateErrors.length) {
 			templateErrors.forEach(({ error, outputFormat }) => {
-				console.log(`[drygen] Template errors in \`${outputFormat.template}\``);
+				console.log(`[drygen] Template errors in "${outputFormat.template}"`);
 				console.error(error.message);
 			});
 			return;
 		}
 
-		console.log(`[drygen] Generated for ${rule.name}`);
+		console.log(`[drygen] Generated for "${rule.name}"`);
 	}
 
 	async function buildOutputFormats(rule: Rule) {
