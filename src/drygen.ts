@@ -237,9 +237,8 @@ export default async function drygen(inputOptions: IInputOptions) {
 		]);
 
 		const outputDir = path.dirname(outputFormat.path);
-		handlebars.registerHelper("relativePath", (filePath: unknown) => {
-			const relativePath = normalize(path.relative(outputDir, filePath as any));
-			return relativePath.startsWith(".") ? relativePath : `./${relativePath}`;
+		handlebars.registerHelper("relativePath", (filePath: any) => {
+			return normalize(path.relative(outputDir, filePath));
 		});
 
 		const result = handlebars.compile(
