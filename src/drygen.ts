@@ -55,6 +55,8 @@ export type OutputConfig =
 			dependencies: DependencyFileList;
 	  }) => OutputFormat[] | Promise<OutputFormat[]>);
 
+export type OutputFormat = OutputTemplateFormat | OutputContentFormat;
+
 export type OutputTemplateFormat = {
 	path: string;
 	template: string;
@@ -67,8 +69,6 @@ export type OutputContentFormat = {
 	path: string;
 	content: string | Buffer;
 };
-
-export type OutputFormat = OutputTemplateFormat | OutputContentFormat;
 
 export default async function drygen(inputOptions: Options) {
 	const options = {
@@ -99,7 +99,7 @@ export default async function drygen(inputOptions: Options) {
 		await Promise.all(
 			options.rules.map(async (rule) => {
 				const dependencyPatternListAsArray = Array.isArray(rule.dependencies)
-							? rule.dependencies
+					? rule.dependencies
 					: Object.values(rule.dependencies).flat();
 				const dependenciesWatcher = chokidar
 					.watch(dependencyPatternListAsArray, { ignoreInitial: true })
@@ -176,8 +176,9 @@ export default async function drygen(inputOptions: Options) {
 					content = outputFormat.content;
 				}
 
-				const outputDir = path.dirname(outputFormat.path);
-				await fs.promises.mkdir(outputDir, { recursive: true });
+				await fs.promises.mkdir(path.dirname(outputFormat.path), {
+					recursive: true,
+				});
 				await fs.promises.writeFile(outputFormat.path, content);
 			})
 		);
@@ -213,6 +214,7 @@ export default async function drygen(inputOptions: Options) {
 
 	async function buildTemplateFilePaths(rule: Rule) {
 		const result: string[] = [];
+
 		(await buildOutputFormats(rule)).forEach((outputFormat) => {
 			if ("template" in outputFormat) {
 				result.push(outputFormat.template);
