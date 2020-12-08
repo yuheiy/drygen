@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"author": "Yuhei Yasuda <yuhei.yasuda1003@gmail.com> (https://yuheiy.com/)",
 	"repository": "yuheiy/drygen",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"main": "lib/drygen.js",
 	"types": "lib/drygen.d.ts",
 	"bin": "lib/cli.js",
