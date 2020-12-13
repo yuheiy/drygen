@@ -88,11 +88,7 @@ export default async function drygen(inputOptions: Options) {
 
 	const handlebars = createHandlebars(options.handlebars);
 
-	await Promise.all(
-		options.rules.map(async (rule) => {
-			await writeFor(rule);
-		})
-	);
+	await Promise.all(options.rules.map(writeFor));
 
 	const watchers: chokidar.FSWatcher[] = [];
 	if (options.watch) {
@@ -144,11 +140,7 @@ export default async function drygen(inputOptions: Options) {
 				throw new Error("drygen is not watching");
 			}
 
-			await Promise.all(
-				watchers.map(async (watcher) => {
-					await watcher.close();
-				})
-			);
+			await Promise.all(watchers.map((watcher) => watcher.close()));
 		},
 	};
 
@@ -255,11 +247,7 @@ export default async function drygen(inputOptions: Options) {
 	async function loadDependencyFiles(patternList: DependencyPatternList) {
 		if (Array.isArray(patternList)) {
 			const filePaths = await globby(patternList, { absolute: true });
-			return Promise.all(
-				filePaths.map(async (filePath) => {
-					return loadDependencyFile(filePath);
-				})
-			);
+			return Promise.all(filePaths.map(loadDependencyFile));
 		}
 
 		const result: DependencyFileList = {};
