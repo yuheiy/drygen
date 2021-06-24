@@ -38,7 +38,7 @@ Then create an [EJS](https://ejs.co/) template file named `import.scss.ejs` to r
 
 ```ejs
 <% dependencies.forEach((dep) => { -%>
-@forward "<%- join(relative(dep.dir), dep.name.replace(/^_/, "")); %>";
+@forward "<%- join(relative(dep.dir), dep.name.replace(/^_/, "")) %>";
 <% }); -%>
 ```
 
