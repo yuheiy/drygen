@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
+		<title><%- titleCase(context.component.name.replace(/^_/, "")) %></title>
+	</head>
+	<body>
+		<h1><%- titleCase(context.component.name.replace(/^_/, "")) %></h1>
+		<p><%- context.index + 1 %> / <%- context.total %></p>
+	</body>
+</html>

@@ -1,0 +1,7 @@
+<% dependencies.objects.forEach((dep) => { -%>
+@use "<%- relative(dep.path) %>";
+<% }); -%>
+
+<% dependencies.components.forEach((dep) => { -%>
+@use "<%- relative(dep.path) %>";
+<% }); -%>

@@ -1,0 +1,4 @@
+<% for (const value of ["foo", "bar", "baz"]) { -%>
+<% await context.delay(100) -%>
+<%- value %>
+<% } -%>

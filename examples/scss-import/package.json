@@ -1,0 +1,9 @@
+{
+	"scripts": {
+		"build": "drygen",
+		"watch": "drygen --watch"
+	},
+	"devDependencies": {
+		"drygen": "file:../.."
+	}
+}

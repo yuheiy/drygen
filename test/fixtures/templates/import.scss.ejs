@@ -1,0 +1,8 @@
+<% if (Object.keys(context).length) { _%>
+/*
+<%- JSON.stringify(context, null, '	') %>
+*/
+<% } _%>
+<% dependencies.forEach((dep) => { -%>
+@forward "<%- relative(dep.path) %>";
+<% }); -%>

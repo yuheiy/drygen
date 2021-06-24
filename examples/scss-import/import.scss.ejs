@@ -1,0 +1,3 @@
+<% dependencies.forEach((dep) => { -%>
+@forward "<%- join(relative(dep.dir), dep.name.replace(/^_/, "")) %>";
+<% }); -%>

@@ -1,41 +1,56 @@
 {
 	"name": "drygen",
-	"description": "The code generator that depends on the specified files.",
+	"version": "0.0.2",
+	"description": "The code generator that depends on specific files is designed to implement a Single Source of Truth (SSOT).",
+	"repository": "yuheiy/drygen",
 	"license": "MIT",
 	"author": "Yuhei Yasuda <yuhei.yasuda1003@gmail.com> (https://yuheiy.com/)",
-	"repository": "yuheiy/drygen",
-	"version": "0.0.2",
-	"main": "lib/drygen.js",
-	"types": "lib/drygen.d.ts",
-	"bin": "lib/cli.js",
+	"main": "cjs/index.js",
+	"module": "esm/index.js",
+	"types": "cjs/index.d.ts",
+	"bin": {
+		"drygen": "bin/drygen.js"
+	},
 	"files": [
-		"lib"
+		"bin",
+		"cjs",
+		"esm"
 	],
 	"scripts": {
-		"build": "tsc --project .",
-		"prepublish": "npm run build",
-		"watch": "tsc --project . --watch",
-		"test": "jest",
-		"demo": "node lib/cli.js --config demo/drygen.config.js"
+		"build": "tsc --project . && tsc --project ./tsconfig.module.json",
+		"clean": "rimraf cjs/ esm/",
+		"prepublishOnly": "npm run clean && npm run build",
+		"test": "mocha"
 	},
 	"dependencies": {
+		"chalk": "^4.1.1",
 		"change-case": "^4.1.2",
-		"chokidar": "^3.4.3",
-		"globby": "^11.0.1",
-		"handlebars": "^4.7.6",
-		"meow": "^8.0.0",
-		"normalize-path": "^3.0.0"
+		"chokidar": "^3.5.2",
+		"cosmiconfig": "^7.0.0",
+		"ejs": "^3.1.6",
+		"globby": "^11.0.4",
+		"normalize-path": "^3.0.0",
+		"replace-ext": "^2.0.0",
+		"title-case": "^3.0.3",
+		"yargs": "^17.0.1",
+		"zod": "^3.2.0"
 	},
 	"devDependencies": {
-		"@types/jest": "^26.0.16",
-		"@types/node": "^14.14.10",
+		"@types/ejs": "^3.0.6",
+		"@types/mocha": "^8.2.2",
+		"@types/node": "^15.12.4",
 		"@types/normalize-path": "^3.0.0",
-		"jest": "^26.6.3",
-		"prettier": "^2.2.1",
-		"ts-jest": "^26.4.4",
-		"typescript": "^4.1.2"
+		"@types/replace-ext": "^2.0.0",
+		"@types/yargs": "^17.0.0",
+		"execa": "^5.1.1",
+		"mocha": "^9.0.1",
+		"prettier": "^2.3.1",
+		"prettier-plugin-organize-imports": "^2.1.0",
+		"rimraf": "^3.0.2",
+		"ts-node": "^10.0.0",
+		"typescript": "^4.3.4"
 	},
 	"engines": {
-		"node": ">=12"
+		"node": ">=12.0.0"
 	}
 }
