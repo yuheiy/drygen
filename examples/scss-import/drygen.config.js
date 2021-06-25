@@ -5,7 +5,7 @@ module.exports = {
 	rules: [
 		{
 			name: "objects import",
-			dependencies: ["objects/**/*.scss"],
+			dependencies: ["objects/*.scss"],
 			outputs: [
 				{
 					path: "_objects.scss",
@@ -15,7 +15,7 @@ module.exports = {
 		},
 		{
 			name: "components import",
-			dependencies: ["components/**/*.scss"],
+			dependencies: ["components/*.scss"],
 			outputs: [
 				{
 					path: "_components.scss",
