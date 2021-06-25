@@ -10,8 +10,8 @@ async function assertFileContent(path_: string, expectedContent: string) {
 	assert.equal(await fsPromises.readFile(path_, "utf-8"), expectedContent);
 }
 
-function delay(ms: number) {
-	return new Promise<void>((resolve) => setTimeout(resolve, ms));
+function delay(duration: number) {
+	return new Promise<void>((resolve) => setTimeout(resolve, duration));
 }
 
 describe("class OutputEntry", function () {

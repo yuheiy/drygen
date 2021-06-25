@@ -17,6 +17,6 @@ module.exports = async () => {
 	};
 };
 
-function delay(ms) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
+function delay(duration) {
+	return new Promise((resolve) => setTimeout(resolve, duration));
 }
