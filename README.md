@@ -44,9 +44,9 @@ Then create an [EJS](https://ejs.co/) template file named `import.scss.ejs` to r
 
 The variables are exposed in the templates:
 
-- `dependencies`: an array of [DependencyFile](#DependencyFile). It contains a file path, contents, etc
-- `relative`: returns the relative path from the output file
-- `join`: a reference to POSIX specification `path.join()`
+- `dependencies`: an array of [`DependencyFile`](#dependencies). It contains a file path, contents, etc
+- `relative`: returns a relative path from the output file
+- `join`: a reference to POSIX specification [`path.join()`](https://nodejs.org/api/path.html#path_path_join_paths)
 
 Finally, run the command:
 
@@ -162,9 +162,9 @@ If you specify an array, `dependencies` variable exposed to the templates will b
 ```
 
 ```ejs
-<% dependencies.forEach(dep => { -%>
+<% dependencies.forEach((dep) => { -%>
 @forward "<%- relative(dep.path) %>";
-<% }) -%>
+<% }); -%>
 ```
 
 If you specify an object of arrays, `dependencies` variable exposed to the templates will be an object:
@@ -231,7 +231,7 @@ If the entry needs to be based on `dependencies`, you can specify a function ins
 ```
 
 - `name`: a name of the rule
-- `dependencies`: a list of [`DependencyFile`](#DependencyFile)
+- `dependencies`: a list of [`DependencyFile`](#dependencies)
 
 And it can return an array:
 
@@ -283,22 +283,19 @@ _drygen_ uses [EJS](https://ejs.co/) as a template engine.
 
 ### Variables
 
-The following variables are exposed in the templates:
+The following variables are exposed in the templates.
 
-| Name           | Type                                                      | Description                                                                                                                             |
-| :------------- | :-------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`         | `string`                                                  | The value passed to [`rules[].name`](#rulesname)                                                                                        |
-| `dependencies` | `DependencyFile[] \| Record<keyof any, DependencyFile[]>` | A list of [DependencyFile](#DependencyFile). The type will be based on the value passed to [`rules[].dependencies`](#rulesdependencies) |
-| `context`      | `Record<keyof any, any>`                                  | The value passed to [`rules[].outputs[].context`](#rulesoutputs)                                                                        |
-| `join`         | `(...paths: string[]) => string`                          | A reference to POSIX specification [`path.join()`](https://nodejs.org/api/path.html#path_path_join_paths)                               |
-| `relative`     | `(to: string) => string`                                  | Returns a relative path from the output file                                                                                            |
-| `replaceExt`   | `(path: string, extension: string) => string`             | Replaces the file extension with another one. The wrapper for [`replace-ext` module](https://github.com/gulpjs/replace-ext)             |
+#### `name`
 
-In addition, [the core functions of Change Case module](https://github.com/blakeembrey/change-case#core) and [`titleCase`](https://github.com/blakeembrey/change-case#titlecase) are also available.
+Type: `string`
 
-### Types
+The value passed to [`rules[].name`](#rulesname).
 
-#### `DependencyFile`
+#### `dependencies`
+
+Type: `DependencyFile[] | Record<keyof any, DependencyFile[]>`
+
+A list of `DependencyFile`. The type will be based on the value passed to [`rules[].dependencies`](#rulesdependencies).
 
 ```ts
 type DependencyFile = {
@@ -321,3 +318,31 @@ type DependencyFile = {
 - `ext`: `ext` property of the return value of [`path.parse()`](https://nodejs.org/api/path.html#path_path_parse_path)
 - `content`: contents of the file
 - `stats`: [`fs.Stats`](https://nodejs.org/api/fs.html#fs_class_fs_stats) object provides information about the file
+
+#### `context`
+
+Type: `Record<keyof any, any>`
+
+The value passed to [`rules[].outputs[].context`](#rulesoutputs).
+
+#### `join(...paths)`
+
+Type: `(...paths: string[]) => string`
+
+A reference to POSIX specification [`path.join()`](https://nodejs.org/api/path.html#path_path_join_paths).
+
+#### `relative(to)`
+
+Type: `(to: string) => string`
+
+Returns a relative path from the output file.
+
+#### `replaceExt(path, extension)`
+
+Type: `(path: string, extension: string) => string`
+
+Replaces the file extension with another one. The wrapper for [`replace-ext` module](https://github.com/gulpjs/replace-ext).
+
+#### Change Case modules
+
+[The core modules of Change Case](https://github.com/blakeembrey/change-case#core) and [`titleCase`](https://github.com/blakeembrey/change-case#titlecase) are also available.
