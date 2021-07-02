@@ -1,7 +1,7 @@
 import changeCase from "change-case";
 import ejs from "ejs";
 import { promises as fsPromises } from "fs";
-import normalizeToPosixPath from "normalize-path";
+import normalizePath from "normalize-path";
 import path from "path";
 import replaceExt from "replace-ext";
 import { titleCase } from "title-case";
@@ -44,7 +44,9 @@ export class OutputEntry {
 			);
 		} catch (error) {
 			throw new DrygenError(
-				`'${path.relative(this.rootDir, this.templatePath)}' does not exist`,
+				`'${normalizePath(
+					path.relative(this.rootDir, this.templatePath)
+				)}' does not exist`,
 				error
 			);
 		}
@@ -64,7 +66,9 @@ export class OutputEntry {
 			);
 		} catch (error) {
 			throw new DrygenError(
-				`template error in '${path.relative(this.rootDir, this.templatePath)}'`,
+				`template error in '${normalizePath(
+					path.relative(this.rootDir, this.templatePath)
+				)}'`,
 				error
 			);
 		}
@@ -78,9 +82,9 @@ export class OutputEntry {
 			context: this.context,
 			join: path.posix.join,
 			relative: (to: string) =>
-				path.posix.relative(normalizeToPosixPath(this.dirname), to),
+				path.posix.relative(normalizePath(this.dirname), to),
 			replaceExt: (npath: string, ext: string) =>
-				normalizeToPosixPath(replaceExt(npath, ext)),
+				normalizePath(replaceExt(npath, ext)),
 			...changeCase,
 			titleCase,
 		};

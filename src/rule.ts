@@ -2,7 +2,7 @@ import chalk from "chalk";
 import chokidar, { FSWatcher } from "chokidar";
 import { promises as fsPromises } from "fs";
 import globby from "globby";
-import normalizeToPosixPath from "normalize-path";
+import normalizePath from "normalize-path";
 import path from "path";
 import { DependencyFile, RuleOptions } from "./config";
 import { DrygenError } from "./error";
@@ -36,7 +36,9 @@ export class Rule {
 			).map(async (outputEntry) => {
 				await outputEntry.write(dependencyFiles!);
 				this.#log(
-					`'${path.relative(this.rootDir, outputEntry.path)}' has been written`
+					`'${normalizePath(
+						path.relative(this.rootDir, outputEntry.path)
+					)}' has been written`
 				);
 			})
 		);
@@ -85,9 +87,8 @@ export class Rule {
 			})
 			.on("unlink", (path_) => {
 				this.#log(
-					`'${path.relative(
-						this.rootDir,
-						path_
+					`'${normalizePath(
+						path.relative(this.rootDir, path_)
 					)}' has been removed, you should create a template file for this path`
 				);
 			});
@@ -209,7 +210,7 @@ export class Rule {
 			fsPromises.readFile(path.resolve(this.rootDir, path_)),
 			fsPromises.stat(path.resolve(this.rootDir, path_)),
 		]);
-		const posixPath = normalizeToPosixPath(path_);
+		const posixPath = normalizePath(path_);
 
 		return {
 			path: posixPath,

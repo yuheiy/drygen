@@ -1,6 +1,6 @@
 import { strict as assert } from "assert";
 import { promises as fsPromises } from "fs";
-import normalizeToPosixPath from "normalize-path";
+import normalizePath from "normalize-path";
 import path from "path";
 import { OutputEntry } from "../src/output";
 
@@ -55,7 +55,7 @@ baz
 			});
 			const { relative } = outputEntry.defaultTemplateData;
 			const actual = relative(
-				normalizeToPosixPath(path.join(fixturesDir, "dependencies/test.txt"))
+				normalizePath(path.join(fixturesDir, "dependencies/test.txt"))
 			);
 			const expected = "dependencies/test.txt";
 			assert.equal(actual, expected);
@@ -68,7 +68,7 @@ baz
 			});
 			const { replaceExt } = outputEntry.defaultTemplateData;
 			const actual = replaceExt(
-				normalizeToPosixPath("dependencies/test.txt"),
+				normalizePath("dependencies/test.txt"),
 				".html"
 			);
 			const expected = "dependencies/test.html";
