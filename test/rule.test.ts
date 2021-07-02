@@ -142,6 +142,31 @@ describe("class Rule", function () {
 				);
 			});
 
+			it("negative patterns for dependencies", async function () {
+				const outputPath = path.join(tempDir, "file-list.txt");
+
+				await new Rule(fixturesDir, {
+					name: "negative patterns",
+					dependencies: [
+						"dependencies/components/**/*.scss",
+						"!dependencies/components/_button.scss",
+					],
+					outputs: [
+						{
+							path: outputPath,
+							template: "templates/file-list.txt.ejs",
+						},
+					],
+				}).write();
+
+				await assertFileContent(
+					outputPath,
+					`- _card.scss
+- _disclosure.scss
+`
+				);
+			});
+
 			it("function style output", async function () {
 				const outputPath = path.join(tempDir, "_components.scss");
 

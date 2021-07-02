@@ -93,14 +93,10 @@ export class Rule {
 			});
 
 		this.#dependenciesWatcher = chokidar
-			.watch(
-				this.#dependencyPatternsAsArray.map((pattern) =>
-					path.resolve(this.rootDir, pattern)
-				),
-				{
-					ignoreInitial: true,
-				}
-			)
+			.watch(this.#dependencyPatternsAsArray, {
+				ignoreInitial: true,
+				cwd: this.rootDir,
+			})
 			.on("add", async () => {
 				await handleWatch(true);
 			})
@@ -189,13 +185,12 @@ export class Rule {
 	) {
 		if (Array.isArray(dependencyPatterns)) {
 			const paths = (
-				await globby(
-					dependencyPatterns.map((pattern) =>
-						normalizeToPosixPath(path.resolve(this.rootDir, pattern))
-					)
-				)
+				await globby(dependencyPatterns, {
+					cwd: this.rootDir,
+					absolute: true,
+				})
 			).sort();
-			return Promise.all(paths.map(this.#loadDependencyFile.bind(this)));
+			return Promise.all(paths.map((path_) => this.#loadDependencyFile(path_)));
 		}
 
 		const result: Record<keyof any, DependencyFile[]> = {};
