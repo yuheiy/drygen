@@ -385,6 +385,8 @@ dependency content
 			});
 
 			it("should rewrite after templates have been changed", async function () {
+				this.timeout(5000);
+
 				const outputPath = path.join(tempDir, "output.txt");
 				const templatePath = path.join(tempDir, "template.ejs");
 
@@ -461,17 +463,21 @@ _wrapper.scss:
 					templatePath
 				);
 
-				await waitFor(() =>
-					assertFileContent(
-						outputPath,
-						`- _button.scss
+				await waitFor(
+					() =>
+						assertFileContent(
+							outputPath,
+							`- _button.scss
 - _card.scss
 - _disclosure.scss
 - _grid.scss
 - _stack.scss
 - _wrapper.scss
 `
-					)
+						),
+					{
+						timeout: 4000,
+					}
 				);
 			});
 
