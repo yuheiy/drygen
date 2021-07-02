@@ -15,6 +15,67 @@ function delay(duration: number) {
 	return new Promise<void>((resolve) => setTimeout(resolve, duration));
 }
 
+function waitFor(
+	callback: () => any,
+	{
+		timeout = 1000,
+		interval = 50,
+	}: { timeout?: number; interval?: number } = {}
+) {
+	return new Promise((resolve, reject) => {
+		let lastError: Error;
+		let promiseStatus: "idle" | "pending" | "resolved" | "rejected" = "idle";
+
+		const timeoutId = setTimeout(handleTimeout, timeout);
+		const intervalId = setInterval(checkCallback, interval);
+
+		function onDone(error: Error | null, result: any) {
+			clearTimeout(timeoutId);
+			clearInterval(intervalId);
+
+			if (error) {
+				reject(error);
+			} else {
+				resolve(result);
+			}
+		}
+
+		function checkCallback() {
+			if (promiseStatus === "pending") return;
+			try {
+				const result = callback();
+				if (typeof result?.then === "function") {
+					promiseStatus = "pending";
+					result.then(
+						(resolvedValue: any) => {
+							promiseStatus = "resolved";
+							onDone(null, resolvedValue);
+						},
+						(rejectedValue: any) => {
+							promiseStatus = "rejected";
+							lastError = rejectedValue;
+						}
+					);
+				} else {
+					onDone(null, result);
+				}
+			} catch (error) {
+				lastError = error;
+			}
+		}
+
+		function handleTimeout() {
+			let error: Error;
+			if (lastError) {
+				error = lastError;
+			} else {
+				error = new Error("Timed out in waitFor");
+			}
+			onDone(error, null);
+		}
+	});
+}
+
 describe("class Rule", function () {
 	let tempDir: string;
 
@@ -312,14 +373,14 @@ describe("class Rule", function () {
 
 				await fsPromises.writeFile(dependencyPath, "dependency content");
 
-				await delay(300);
-
-				await assertFileContent(
-					outputPath,
-					`dependency.txt:
+				await waitFor(() =>
+					assertFileContent(
+						outputPath,
+						`dependency.txt:
 
 dependency content
 `
+					)
 				);
 			});
 
@@ -347,11 +408,10 @@ dependency content
 					templatePath
 				);
 
-				await delay(300);
-
-				await assertFileContent(
-					outputPath,
-					`_button.scss:
+				await waitFor(() =>
+					assertFileContent(
+						outputPath,
+						`_button.scss:
 
 .c-button {
 }
@@ -391,6 +451,7 @@ _wrapper.scss:
 }
 
 `
+					)
 				);
 
 				await fsPromises.copyFile(
@@ -398,17 +459,17 @@ _wrapper.scss:
 					templatePath
 				);
 
-				await delay(300);
-
-				await assertFileContent(
-					outputPath,
-					`- _button.scss
+				await waitFor(() =>
+					assertFileContent(
+						outputPath,
+						`- _button.scss
 - _card.scss
 - _disclosure.scss
 - _grid.scss
 - _stack.scss
 - _wrapper.scss
 `
+					)
 				);
 			});
 
@@ -448,12 +509,12 @@ _wrapper.scss:
 					})
 				);
 
-				await delay(300);
-
-				await assertFileContent(
-					outputPath,
-					`- dependency.json
+				await waitFor(() =>
+					assertFileContent(
+						outputPath,
+						`- dependency.json
 `
+					)
 				);
 
 				await fsPromises.writeFile(
@@ -463,16 +524,16 @@ _wrapper.scss:
 					})
 				);
 
-				await delay(300);
-
-				await assertFileContent(
-					outputPath,
-					`dependency.json:
+				await waitFor(() =>
+					assertFileContent(
+						outputPath,
+						`dependency.json:
 
 ${JSON.stringify({
 	template: path.join(fixturesDir, "templates/file-content.txt.ejs"),
 })}
 `
+					)
 				);
 			});
 		});
@@ -502,9 +563,7 @@ ${JSON.stringify({
 
 				await fsPromises.writeFile(templatePath, "<%- dependencies.length %>");
 
-				await delay(300);
-
-				await assertFileContent(outputPath, "1");
+				await waitFor(() => assertFileContent(outputPath, "1"));
 			});
 		});
 	});
