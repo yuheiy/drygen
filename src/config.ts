@@ -30,45 +30,43 @@ export type OutputOptionsObject = z.infer<typeof outputOptionsObjectScheme>;
 const ruleScheme = z.object({
 	name: z.string(),
 	dependencies: z.union([globPatternsScheme, z.record(globPatternsScheme)]),
-	outputs: z
-		.array(
-			z.union([
-				outputOptionsObjectScheme,
-				z
-					.function()
-					.args(
-						z.object({
-							name: z.string(),
-							dependencies: z.union([
-								z.array(dependencyFileScheme),
-								z.record(z.array(dependencyFileScheme)),
-							]),
-						})
-					)
-					.returns(
+	outputs: z.array(
+		z.union([
+			outputOptionsObjectScheme,
+			z
+				.function()
+				.args(
+					z.object({
+						name: z.string(),
+						dependencies: z.union([
+							z.array(dependencyFileScheme),
+							z.record(z.array(dependencyFileScheme)),
+						]),
+					})
+				)
+				.returns(
+					z.union([
 						z.union([
+							outputOptionsObjectScheme,
+							z.array(outputOptionsObjectScheme),
+						]),
+						z.promise(
 							z.union([
 								outputOptionsObjectScheme,
 								z.array(outputOptionsObjectScheme),
-							]),
-							z.promise(
-								z.union([
-									outputOptionsObjectScheme,
-									z.array(outputOptionsObjectScheme),
-								])
-							),
-						])
-					),
-			])
-		)
-		.min(1),
+							])
+						),
+					])
+				),
+		])
+	),
 });
 
 export type RuleOptions = z.infer<typeof ruleScheme>;
 
 const configSchema = z
 	.object({
-		rules: z.array(ruleScheme).min(1),
+		rules: z.array(ruleScheme),
 	})
 	.strict();
 
