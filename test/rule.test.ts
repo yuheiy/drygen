@@ -536,6 +536,40 @@ ${JSON.stringify({
 					)
 				);
 			});
+
+			it("should rewrite after the parent directory of dependencies has been removed", async function () {
+				const dependencyPath = path.join(tempDir, "sub/dependency.txt");
+				const dependencyDirPath = path.dirname(dependencyPath);
+				const templatePath = path.join(tempDir, "file-list.txt.ejs");
+				const outputPath = path.join(tempDir, "file-list.txt");
+
+				await fsPromises.copyFile(
+					path.join(fixturesDir, "templates/file-list.txt.ejs"),
+					templatePath
+				);
+
+				rule = new Rule(fixturesDir, {
+					name: "handle unlinkDir",
+					dependencies: [dependencyPath],
+					outputs: [
+						{
+							path: outputPath,
+							template: templatePath,
+						},
+					],
+				});
+
+				await rule.watch();
+
+				await fsPromises.mkdir(dependencyDirPath);
+				await fsPromises.writeFile(dependencyPath, "dependency content");
+
+				await delay(300);
+
+				await fsPromises.rmdir(dependencyDirPath, { recursive: true });
+
+				await waitFor(() => assertFileContent(outputPath, ``));
+			});
 		});
 
 		describe("persistence", function () {

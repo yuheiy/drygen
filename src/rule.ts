@@ -109,6 +109,9 @@ export class Rule {
 			})
 			.on("unlink", async () => {
 				await handleWatch(true);
+			})
+			.on("unlinkDir", async () => {
+				await handleWatch(true);
 			});
 	}
 
