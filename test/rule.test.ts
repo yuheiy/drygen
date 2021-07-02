@@ -456,8 +456,6 @@ _wrapper.scss:
 					)
 				);
 
-				await delay(300);
-
 				await fsPromises.copyFile(
 					path.join(fixturesDir, "templates/file-list.txt.ejs"),
 					templatePath
