@@ -1,6 +1,6 @@
 {
 	"name": "drygen",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "The code generator that depends on specific files is designed to implement a Single Source of Truth (SSOT).",
 	"repository": "yuheiy/drygen",
 	"license": "MIT",
