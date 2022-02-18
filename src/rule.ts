@@ -30,10 +30,9 @@ export class Rule {
 			dependencyFiles = await this.#loadDependencyFiles();
 		}
 
+		const outputEntries = await this.#buildOutputEntries(dependencyFiles);
 		await Promise.all(
-			(
-				await this.#buildOutputEntries(dependencyFiles)
-			).map(async (outputEntry) => {
+			outputEntries.map(async (outputEntry) => {
 				await outputEntry.write(dependencyFiles!);
 				this.#log(
 					`'${normalizePath(
