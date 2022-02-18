@@ -74,5 +74,16 @@ baz
 			const expected = "dependencies/test.html";
 			assert.equal(actual, expected);
 		});
+
+		it("camelCase()", function () {
+			const outputEntry = new OutputEntry(fixturesDir, "test", {
+				path: "output.txt",
+				template: "output.txt.ejs",
+			});
+			const { camelCase } = outputEntry.defaultTemplateData;
+			const actual = camelCase("my-button");
+			const expected = "myButton";
+			assert.equal(actual, expected);
+		});
 	});
 });

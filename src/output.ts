@@ -1,4 +1,4 @@
-import changeCase from "change-case";
+import * as changeCase from "change-case";
 import ejs from "ejs";
 import { promises as fsPromises } from "fs";
 import normalizePath from "normalize-path";
